@@ -3,14 +3,14 @@
 
 int main(){
 
-char x = CHAR_MAX;
+    char x = CHAR_MAX;
 
-printf("x initially was: %d \n", x);
+    printf("x initially was: %d \n", x);
 
-x++;
+    x++;
 
-printf(" x now is: %d \n", x);
+    printf(" x now is: %d \n", x);
 
-return 0;
+    return 0;
 
 }
