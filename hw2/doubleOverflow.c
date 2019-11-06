@@ -4,14 +4,14 @@
 
 int main(){
 
-double x = DBL_MAX;
+    double x = DBL_MAX;
 
-printf("x initially was: %f \n", x);
+    printf("x initially was: %f \n", x);
 
-x = x*2;
+    x = x*2;
 
-printf(" x now is: %f \n", x);
+    printf(" x now is: %f \n", x);
 
-return 0;
+  return 0;
 
 }
