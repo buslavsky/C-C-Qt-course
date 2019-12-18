@@ -1,30 +1,32 @@
 #include <stdio.h>
 #include <string.h>
+#include <locale.h>
 
 
 unsigned FrequencyArray[256];
 
 int main( )
 {
-  FILE *fileWithChars;
-    	  
+    setlocale(0, "");
+    FILE *fileWithChars;
+
   	if ((fileWithChars = fopen("testFile.txt", "rt")) == NULL)
   	{
-    		printf("Файл '%s' невозможно прочитать\n", "testFile.txt");
+    		printf("File '%s' could not be read\n", "testFile.txt");
     		return 1;
   	}
 
    	memset(FrequencyArray, 0, 256 * sizeof(unsigned));
-	
+
 	while (!feof(fileWithChars))
     		FrequencyArray[fgetc(fileWithChars)] ++;
-  	
-	printf("Символы и частоты их появления:\n");
-  		
+
+	printf("Chars and their appear frequencies:\n");
+
 		for (int i = 0; i < 256; i ++)
     			if (FrequencyArray[i])
 				{
-					printf("Символ %c появился %5u раз\n", i, FrequencyArray[i]);
+					printf("Char %c appeared %5u times\n", i, FrequencyArray[i]);
 				}
 			return 0;
-} 
+}
