@@ -3,8 +3,8 @@
 
 int main(void)
 {
-   // setlocale(LC_ALL, "en_US.UTF-8");
     FILE *currentFile;
+    int index;
 
     unsigned long fsize(char* file)
     {
@@ -16,23 +16,10 @@ int main(void)
     }
 
     int lengthOfFile = fsize(currentFile);
-    printf("The length of our file is %d ", lengthOfFile);
-    currentFile = fopen("text.txt", "r");
+    //currentFile = fopen("text.txt", "r");
     if(lengthOfFile > 0)
     {
-	    char charArray[1001] = {0};
-	    fgets(charArray, 1001, currentFile);
-        for(int i = 32; i<=256; i++)
-        {
-            int charNumber = 0;
-            for(int j = 0; j < charArray; j++)
-            {
-                if(charArray[j]==i)
-                    charNumber++;
-            }
-            printf("char \"%c\":%d\n", i, charNumber);
-        }
-
+        printf("The length of our file is %d bytes.", lengthOfFile);
     }
     else
         printf("Error: you must have file text.txt in application directory!!!");
