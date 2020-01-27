@@ -96,6 +96,7 @@ void MainWindow::on_tbStartScanning_clicked()
 
                 this->pingTimeResponce(recentAddressAsQString);
                 qDebug() << "pingTimeResponce(recentAddressAsQString): " << recentAddressAsQString;
+
                 }
             }
         }

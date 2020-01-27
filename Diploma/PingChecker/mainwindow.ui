@@ -281,7 +281,7 @@
        <string>Interval (sec):</string>
       </property>
      </widget>
-     <widget class="QToolButton" name="tbStoptMonitoring">
+     <widget class="QToolButton" name="tbStopMonitoring">
       <property name="geometry">
        <rect>
         <x>470</x>
