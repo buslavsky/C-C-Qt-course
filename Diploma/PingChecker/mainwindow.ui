@@ -68,7 +68,7 @@
      <widget class="QToolButton" name="tbStartScanning">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>350</x>
         <y>70</y>
         <width>171</width>
         <height>21</height>
@@ -117,7 +117,7 @@
        <string>Subnet scanning results:</string>
       </property>
      </widget>
-     <widget class="QPlainTextEdit" name="plainTextEdit">
+     <widget class="QPlainTextEdit" name="plainTextEditScanning">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -138,6 +138,45 @@
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="tbStopScanning">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>70</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Stop scanning</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="tbSetDefaults">
+      <property name="geometry">
+       <rect>
+        <x>350</x>
+        <y>100</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Set defaults</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="tbClearLog">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>100</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Clear log</string>
       </property>
      </widget>
     </widget>
@@ -161,7 +200,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPlainTextEdit" name="plainTextEdit_2">
+     <widget class="QPlainTextEdit" name="plainTextEditMonitoring">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -187,14 +226,14 @@
      <widget class="QToolButton" name="tbStartMonitoring">
       <property name="geometry">
        <rect>
-        <x>430</x>
+        <x>290</x>
         <y>60</y>
         <width>171</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Start monitor for IP address</string>
+       <string>Start monitoring for IP address</string>
       </property>
      </widget>
      <widget class="QLabel" name="lblIpAddrToMonitor">
@@ -240,6 +279,19 @@
       </property>
       <property name="text">
        <string>Interval (sec):</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="tbStoptMonitoring">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>60</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Stop monitoring for IP address</string>
       </property>
      </widget>
     </widget>

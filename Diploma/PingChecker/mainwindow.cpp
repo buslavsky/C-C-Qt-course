@@ -4,6 +4,8 @@
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QString>
+#include <QTextCodec>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -11,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Network ping scanner and monitoring tool");
+    this->setWindowTitle("Network ping scanner and monitoring tool for IPv4");
+    this->setMaximumWidth(690);
+    this->setMaximumHeight(480);
 }
 
 MainWindow::~MainWindow()
@@ -21,62 +25,83 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_tbStartScanning_clicked()
 {
-    bool startIpAddrCorrect;
-    bool endIpAddrCorrect;
-    bool subnetAndSequenceAreCorrectSame;
-    bool sequenceIsCorrect;
-    QString startIpAddr = ui->leStartIpAddr->text().trimmed();
-    QString endIpAddr = ui->leEndtIpAddr->text().trimmed();
-
-
-    QHostAddress startAddress(startIpAddr);
-    if (QAbstractSocket::IPv4Protocol == startAddress.protocol())
+    if (scanIsInProgress == false && monitoringIsInProgress == false)
     {
-        qDebug("Valid IPv4 start address.");
-        startIpAddrCorrect = true;
-        ui->leStartIpAddr->setStyleSheet("");
-
-    } else {
-        qDebug("Valid IPv4 start address.");
-        startIpAddrCorrect = false;
-        ui->leStartIpAddr->setStyleSheet("background-color: red;");
-    }
-
-    QHostAddress endAddress(endIpAddr);
-    if (QAbstractSocket::IPv4Protocol == endAddress.protocol())
-    {
-        qDebug("Valid IPv4 end address.");
-        endIpAddrCorrect = false;
-        ui->leEndtIpAddr->setStyleSheet("");
-    } else {
-        qDebug("Valid IPv4 end address.");
-        endIpAddrCorrect = false;
-        ui->leEndtIpAddr->setStyleSheet("background-color: red;");
-    }
+        scanIsInProgress = true;
+        bool startIpAddrCorrect;
+        bool endIpAddrCorrect;
+        bool subnetAndSequenceAreCorrectSame;
+        bool sequenceIsCorrect;
+        QString startIpAddr = ui->leStartIpAddr->text().trimmed();
+        QString endIpAddr = ui->leEndtIpAddr->text().trimmed();
 
 
-    subnetAndSequenceAreCorrectSame = this->subnetAndSequenceCorrectnessCheck(startIpAddr, endIpAddr);
-    sequenceIsCorrect = this->subnetAndSequenceCorrectnessCheck(startIpAddr, endIpAddr);
+        QHostAddress startAddress(startIpAddr);
+        if (QAbstractSocket::IPv4Protocol == startAddress.protocol())
+        {
+            qDebug("Valid IPv4 start address.");
+            startIpAddrCorrect = true;
+            ui->leStartIpAddr->setStyleSheet("");
 
-    if (startIpAddrCorrect && endIpAddrCorrect && subnetAndSequenceAreCorrectSame)
-    {
-        QStringList server_octets = startIpAddr.split(".");
-        uint32_t s11 = server_octets.at(0).toUInt();
-        uint32_t s12 = server_octets.at(1).toUInt();
-        uint32_t s13 = server_octets.at(2).toUInt();
-        uint32_t s14 = server_octets.at(3).toUInt();
-
-        QStringList server_octets2 = endIpAddr.split(".");
-        uint32_t s21 = server_octets2.at(0).toUInt();
-        uint32_t s22 = server_octets2.at(1).toUInt();
-        uint32_t s23 = server_octets2.at(2).toUInt();
-        uint32_t s24 = server_octets2.at(3).toUInt();
-
-        for (int i = s14; i <= s24; i++) {
-
-
-            this->pingTimeResponce("")
+        } else {
+            qDebug("Valid IPv4 start address.");
+            startIpAddrCorrect = false;
+            ui->leStartIpAddr->setStyleSheet("background-color: red;");
         }
+
+        QHostAddress endAddress(endIpAddr);
+        if (QAbstractSocket::IPv4Protocol == endAddress.protocol())
+        {
+            qDebug("Valid IPv4 end address.");
+            endIpAddrCorrect = true;
+            ui->leEndtIpAddr->setStyleSheet("");
+        } else {
+            qDebug("Valid IPv4 end address.");
+            endIpAddrCorrect = false;
+            ui->leEndtIpAddr->setStyleSheet("background-color: red;");
+        }
+
+
+        subnetAndSequenceAreCorrectSame = this->subnetAndSequenceCorrectnessCheck(startIpAddr, endIpAddr);
+        sequenceIsCorrect = this->subnetAndSequenceCorrectnessCheck(startIpAddr, endIpAddr);
+
+        qDebug() << "startIpAddrCorrect " << startIpAddrCorrect << " endIpAddrCorrect " << endIpAddrCorrect << " subnetAndSequenceAreCorrectSame " << subnetAndSequenceAreCorrectSame;
+        if (startIpAddrCorrect && endIpAddrCorrect && subnetAndSequenceAreCorrectSame )
+        {
+            qDebug() << "IF is successfull";
+            QStringList server_octets = startIpAddr.split(".");
+            uint32_t s11 = server_octets.at(0).toUInt();
+            uint32_t s12 = server_octets.at(1).toUInt();
+            uint32_t s13 = server_octets.at(2).toUInt();
+            uint32_t s14 = server_octets.at(3).toUInt();
+
+            QStringList server_octets2 = endIpAddr.split(".");
+            uint32_t s21 = server_octets2.at(0).toUInt();
+            uint32_t s22 = server_octets2.at(1).toUInt();
+            uint32_t s23 = server_octets2.at(2).toUInt();
+            uint32_t s24 = server_octets2.at(3).toUInt();
+
+            for (uint32_t i = s14; i <= s24; i++)
+            {
+                if (scanIsInProgress == false)
+                {
+                    break;
+                } else {
+
+
+                QString recentAddressAsQString = QString().append(QString::number(s11, 10).append(".")
+                                                                       .append(QString::number(s12, 10).append(".")
+                                                                       .append(QString::number(s13, 10).append(".")
+                                                                       .append(QString::number(i, 10)))));
+
+                this->pingTimeResponce(recentAddressAsQString);
+                qDebug() << "pingTimeResponce(recentAddressAsQString): " << recentAddressAsQString;
+                }
+            }
+        }
+    } else {
+        scanIsInProgress = false;
+
     }
 }
 
@@ -153,13 +178,49 @@ uint32_t MainWindow::pingTimeResponce(QString hostName)
     QElapsedTimer timer;
     QString pingWaitTime = "5";
     QProcess pingProcess;
-    #ifdef __linux__
-        exitCode = pingProcess.execute("ping", QStringList() << "-c" << QString::number(pingCount, 10) << "-W" << pingWaitTime << hostName);
-    #else
-        exitCode = pingProcess.execute("ping", QStringList() << "-n" << QString::number(pingCount, 10) << "-w" << pingWaitTime.append("000") << hostName);
-        //pingProcess.start("ping", QStringList() << "-n" << "1" << hostName);
-    #endif
-        qint64 pingResponce = timer.nsecsElapsed();
+#ifdef __linux__
+    exitCode = pingProcess.execute("ping", QStringList() << "-c" << QString::number(pingCount, 10) << "-W" << pingWaitTime << hostName);
+#else
+    //exitCode = pingProcess.execute("ping", QStringList() << "-n" << QString::number(pingCount, 10) << "-w" << pingWaitTime.append("000") << hostName);
+    pingProcess.start("ping", QStringList() << "-n" << "2" << "-w" << "5000" << hostName);//  "172.18.19.5"); // << hostName);
+    pingProcess.waitForFinished();
+    //qDebug() << pingProcess.readAllStandardOutput();
 
-    return static_cast<uint32_t>(pingResponce/1000000);
+    QByteArray encodedString = pingProcess.readAllStandardOutput();
+    QTextCodec *codec = QTextCodec::codecForName("IBM 866");
+    QString string = codec->toUnicode(encodedString);
+    ui->plainTextEditScanning->appendPlainText(string);
+    ui->plainTextEditScanning->repaint();
+
+    //pingProcess.start("ping", QStringList() << "-n" << "1" << hostName);
+#endif
+    qint64 pingResponce = timer.nsecsElapsed();
+
+    QString output_text = "IP-address " + hostName + " ping = " + QString::number(static_cast<uint32_t>(pingResponce/1000000000), 10);
+    ui->plainTextEditScanning->appendPlainText(output_text);
+    ui->plainTextEditScanning->repaint();
+    qDebug() << output_text;
+
+
+
+
+    return static_cast<uint32_t>(pingResponce/1000000000);
+    //QString pingProcess.readAllStandardOutput();
+}
+
+void MainWindow::on_tbStopScanning_clicked()
+{
+    scanIsInProgress = false;
+    ui->tbStartScanning->setEnabled(true);
+}
+
+void MainWindow::on_tbSetDefaults_clicked()
+{
+    ui->leStartIpAddr->setText("172.18.19.1");
+    ui->leEndtIpAddr->setText("172.18.19.15");
+}
+
+void MainWindow::on_tbClearLog_clicked()
+{
+    ui->plainTextEditScanning->clear();
 }
